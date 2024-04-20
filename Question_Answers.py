@@ -89,11 +89,19 @@ if __name__ == "__main__":
                 chunks = chunk_data(data, chunk_size=chunk_size)
                 st.write(f'Chunk size: {chunk_size}, Chunks: {len(chunks)}')
 
-                tokens, embedding_cost = calculate_embedding_cost(chunks)
+                tokens, embedding_cost = print_embedding_cost(chunks)
                 st.write(f'Embedding cost: ${embedding_cost:.4f}')
 
                 vector_store = create_embeddings(chunks)
 
                 st.session_state.vs = vector_store
                 st.success('File Uploaded, chunked and embedded successfully.')
+
+    q = st.text_input('Ask a question about the content of your file:')
+    if q:
+        if 'vs' in st.session_state:
+            vector_store = st.session_state.vs
+            st.write(f'k: {k}')
+            answer = ask_and_get_answer(vector_store, q, k)
+            st.text_area('LLM Answer: ', value=answer)
 
