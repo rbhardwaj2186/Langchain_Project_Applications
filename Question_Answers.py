@@ -61,6 +61,11 @@ def print_embedding_cost(texts):
     print(f'Embedding Cost in USD: {total_tokens / 1000 * 0.0004:.6f}')
     return total_tokens, total_tokens / 1000 * 0.0004
 
+def clear_history():
+    if 'history' in st.session_state:
+        del st.session_state['history']
+
+
 if __name__ == "__main__":
     import os
     from dotenv import load_dotenv, find_dotenv
@@ -74,9 +79,9 @@ if __name__ == "__main__":
             os.environ['OPENAI_API_KEY'] = api_key
 
         uploaded_file = st.file_uploader('Upload a file', type=['pdf','docx','txt'])
-        chunk_size = st.number_input('chunk_size', min_value=100, max_value=2048, value=512)
-        k = st.number_input('k', min_value=1, max_value=20, value=3)
-        add_data = st.button('Add Data')
+        chunk_size = st.number_input('chunk_size', min_value=100, max_value=2048, value=512, on_change=clear_history)
+        k = st.number_input('k', min_value=1, max_value=20, value=3, on_change=clear_history)
+        add_data = st.button('Add Data', on_click=clear_history)
 
         if uploaded_file and add_data:
             with st.spinner('Reading, chunking and embedding file ...'):
@@ -112,6 +117,7 @@ if __name__ == "__main__":
             st.session_state.history = f'{value} \n {"-" * 100} \n {st.session_state.history}'
             h = st.session_state.history
             st.text_area(label='Chat history', value=h, key='history', height=400)
+# Now we add functionality, which removes history when a new document is loaded
 
 
 
