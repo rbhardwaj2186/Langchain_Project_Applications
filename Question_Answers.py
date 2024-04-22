@@ -3,7 +3,8 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
 import os
 
-
+# The load_document function processes various document formats based on their extensions using specific loaders,
+# returning the loaded data or None if the format is unsupported.
 def load_document(file):
     import os
     name, extension = os.path.splitext(file)
