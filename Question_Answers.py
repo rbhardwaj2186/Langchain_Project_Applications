@@ -26,13 +26,14 @@ def load_document(file):
 
     data = loader.load()
     return data
-
+# This function chunks data into smaller pieces using a text splitter with specified chunk size and overlap, then returns the resulting chunks.
 def chunk_data(data, chunk_size=256, chunk_overlap=20):
     from langchain.text_splitter import RecursiveCharacterTextSplitter
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
     chunks = text_splitter.split_documents(data)
     return chunks
-
+# utilizes OpenAIEmbeddings to generate embeddings for the input text chunks and then creates a vector store using Chroma.from_documents,
+# finally returning the resulting vector store.
 def create_embeddings(chunks):
     embeddings = OpenAIEmbeddings()
     vector_store = Chroma.from_documents(chunks, embeddings)
